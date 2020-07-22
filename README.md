@@ -154,6 +154,54 @@ docker-compose stop
 docker system prune -a
 ```
 
+## Backup and Restore from Docker Images
+
+### Run a Backup
+
+```bash
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./{{project_name}}/br/backup.sh $BKP_FOLDER_NAME
+```
+
+- BKP_FOLDER_NAME:
+  Default value = backup_restore
+  Shared Backup Folder name.
+  The scripts assume it is located on "root" e.g.: /$BKP_FOLDER_NAME/
+
+- SOURCE_URL:
+  Source Server URL, the one generating the "backup" file.
+
+- TARGET_URL:
+  Target Server URL, the one which must be synched.
+
+e.g.:
+
+```bash
+docker exec -it django4{{project_name}} sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./{{project_name}}/br/backup.sh $BKP_FOLDER_NAME'
+```
+
+### Run a Restore
+
+```bash
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./{{project_name}}/br/restore.sh $BKP_FOLDER_NAME
+```
+
+- BKP_FOLDER_NAME:
+  Default value = backup_restore
+  Shared Backup Folder name.
+  The scripts assume it is located on "root" e.g.: /$BKP_FOLDER_NAME/
+
+- SOURCE_URL:
+  Source Server URL, the one generating the "backup" file.
+
+- TARGET_URL:
+  Target Server URL, the one which must be synched.
+
+e.g.:
+
+```bash
+docker exec -it django4{{project_name}} sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./{{project_name}}/br/restore.sh $BKP_FOLDER_NAME'
+```
+
 ## Recommended: Track your changes
 
 Step 1. Install Git (for Linux, Mac or Windows).
