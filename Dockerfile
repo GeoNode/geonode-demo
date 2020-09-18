@@ -37,7 +37,7 @@ RUN chmod +x /usr/src/geonode_master/tasks.py \
     && chmod +x /usr/src/geonode_master/entrypoint.sh
 
 # Prepraing dependencies
-RUN apt-get -y install devscripts build-essential debhelper pkg-kde-tools sharutils
+RUN apt-get update && apt-get install -y devscripts build-essential debhelper pkg-kde-tools sharutils
 RUN git clone https://salsa.debian.org/debian-gis-team/proj.git /tmp/proj
 RUN cd /tmp/proj && debuild -i -us -uc -b && dpkg -i ../*.deb
 
