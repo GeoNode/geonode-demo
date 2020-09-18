@@ -52,10 +52,6 @@ RUN pip install pip==20.1.1 \
 
 RUN pip install --upgrade -e .
 
-# Install "geonode" deps
-RUN cd /usr/src; git clone https://github.com/GeoNode/geonode.git -b master
-RUN cd /usr/src/geonode; pip install --upgrade -r requirements.txt; pip install --upgrade -e .
-
 # Install "geonode-contribs" apps
 RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
 # Install logstash and centralized dashboard dependencies
