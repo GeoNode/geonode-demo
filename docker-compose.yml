@@ -183,6 +183,7 @@ services:
       - '${JENKINS_HTTP_PORT}:${JENKINS_HTTP_PORT}'
       - '${JENKINS_HTTPS_PORT}:${JENKINS_HTTPS_PORT}'
       - '50000:50000'
+    # network_mode: "host"
     volumes:
       - jenkins_data:/var/jenkins_home
       - backup-restore:/backup_restore
