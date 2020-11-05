@@ -1,1 +1,1 @@
--e git+https://github.com/GeoNode/geonode.git@master#egg=GeoNode
+-e git+https://github.com/GeoNode/geonode.git@3.x#egg=GeoNode
