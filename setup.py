@@ -17,7 +17,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #########################################################################
-
 import os
 
 from distutils.core import setup
@@ -45,7 +44,7 @@ setup(
     url='https://github.com/geonode_master/geonode_master',
     packages=find_packages(),
     dependency_links=[
-        "git+https://github.com/GeoNode/geonode.git#egg=geonode"
+        "git+https://github.com/GeoNode/geonode.git@3.x#egg=geonode"
     ],
     include_package_data=True,
 )

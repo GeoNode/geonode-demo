@@ -6,8 +6,8 @@
     github_user: geonode
     server_name: 0.0.0.0
     deploy_user: ubuntu
-    code_repository: https://github.com/-----/geonode_master.git" # e.g., "https://github.com/GeoNode/geonode_master.git"
-    branch_name: 2.10.1
+    code_repository: https://github.com/-----/geonode_master.git" # e.g., "https://github.com/GeoNode/{{ project_name }}.git"
+    branch_name: master
     virtualenv_dir: "/home/ubuntu/.venvs"
     site_url: "http://localhost:8000/" # The public url of the GeoNode instance
     geoserver_url: "http://build.geonode.org/geoserver/latest/geoserver-2.17.2.war" # geoserver_url should match what is found in dev_config.yml
