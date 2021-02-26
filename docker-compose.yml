@@ -28,7 +28,7 @@ services:
         org.geonode.deployment.name: ${COMPOSE_PROJECT_NAME}
 
   geoserver:
-    image: geonode/geoserver:2.17.4
+    image: geonode/geoserver:2.18.1
     build: ./docker/geoserver/
     restart: unless-stopped
     container_name: geoserver4${COMPOSE_PROJECT_NAME}
@@ -96,7 +96,7 @@ services:
     env_file:
       - .env
     environment:
-      CELERY_CMD: celery -A geonode.celery_app:app worker -B -E --statedb=/mnt/volumes/statics/worker.state -s /mnt/volumes/statics/celerybeat-schedule --loglevel=INFO --concurrency=2 -n worker1@%h -f /var/log/celery.log
+      CELERY_CMD: celery -A geonode.celery_app:app worker --without-gossip --without-mingle -Ofair -B -E --statedb=/mnt/volumes/statics/worker.state -s /mnt/volumes/statics/celerybeat-schedule --loglevel=DEBUG --concurrency=10 -n worker1@%h -f /var/log/celery.log
       IS_CELERY: 'True'
 
   geonode:
@@ -133,7 +133,7 @@ services:
       - .env
 
   data-dir-conf:
-    image: geonode/geoserver_data:2.17.4
+    image: geonode/geoserver_data:2.18.1
     restart: on-failure
     container_name: gsconf4${COMPOSE_PROJECT_NAME}
     labels:
