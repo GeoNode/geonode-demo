@@ -58,14 +58,16 @@ LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
 if PROJECT_NAME not in INSTALLED_APPS:
     INSTALLED_APPS += (PROJECT_NAME,)
+    # INSTALLED_APPS = (PROJECT_NAME,) + INSTALLED_APPS
 
 # Location of url mappings
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', '{}.urls'.format(PROJECT_NAME))
 
 # Additional directories which hold static files
-STATICFILES_DIRS.append(
-    os.path.join(LOCAL_ROOT, "static"),
-)
+# STATICFILES_DIRS.append(
+#     os.path.join(LOCAL_ROOT, "static"),
+# )
+STATICFILES_DIRS = [os.path.join(LOCAL_ROOT, "static"), ] + STATICFILES_DIRS
 
 # Location of locale files
 LOCALE_PATHS = (
@@ -97,21 +99,21 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
         'mail_admins': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     "loggers": {
         "django": {
-            "handlers": ["console"], "level": "ERROR", },
-        "geonode": {
             "handlers": ["console"], "level": "INFO", },
+        "geonode": {
+            "handlers": ["console"], "level": "DEBUG", },
         "geoserver-restconfig.catalog": {
             "handlers": ["console"], "level": "ERROR", },
         "owslib": {
@@ -121,9 +123,9 @@ LOGGING = {
         "celery": {
             "handlers": ["console"], "level": "DEBUG", },
         "mapstore2_adapter.plugins.serializers": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "ERROR", },
         "geonode_logstash.logstash": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "ERROR", },
     },
 }
 
