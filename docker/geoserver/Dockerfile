@@ -30,6 +30,7 @@ RUN if [ "$JAI_IMAGEIO" = true ]; then \
 
 RUN wget --no-check-certificate https://www.dropbox.com/s/psolxleimaft0t7/postgis-jdbc-1.3.3.jar?dl=1 -O postgis-jdbc-1.3.3.jar && \
     wget --no-check-certificate https://www.dropbox.com/s/m9dpmfvp8p4iv2p/hibernate-spatial-postgis-1.1.3.1.jar?dl=1 -O hibernate-spatial-postgis-1.1.3.1.jar && \
+    rm /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/hibernate-spatial-h2-geodb-1.1.3.2.jar && \
     mv hibernate-spatial-postgis-1.1.3.1.jar /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/ && \
     mv postgis-jdbc-1.3.3.jar /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/
 
