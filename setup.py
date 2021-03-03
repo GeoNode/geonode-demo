@@ -29,7 +29,7 @@ def read(*rnames):
 
 setup(
     name="geonode_master",
-    version="3.1",
+    version="3.2",
     author="",
     author_email="",
     description="geonode_master, based on GeoNode",

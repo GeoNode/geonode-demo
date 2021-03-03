@@ -1,11 +1,22 @@
 #!/bin/bash
+
+# Exit script in case of error
 set -e
+
+
+echo $"\n\n\n"
+echo "-----------------------------------------------------"
+echo "STARTING DJANGO ENTRYPOINT $(date)"
+echo "-----------------------------------------------------"
 
 /usr/local/bin/invoke update >> /usr/src/geonode_master/invoke.log
 
 source $HOME/.bashrc
 source $HOME/.override_env
 
+echo DOCKER_API_VERSION=$DOCKER_API_VERSION
+echo POSTGRES_USER=$POSTGRES_USER
+echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 echo DATABASE_URL=$DATABASE_URL
 echo GEODATABASE_URL=$GEODATABASE_URL
 echo SITEURL=$SITEURL
@@ -65,5 +76,11 @@ else
         echo "Executing UWSGI server $cmd for Production"
     fi
 fi
+
+echo "-----------------------------------------------------"
+echo "FINISHED DJANGO ENTRYPOINT --------------------------"
+echo "-----------------------------------------------------"
+
+# Run the CMD 
 echo "got command $cmd"
 exec $cmd
