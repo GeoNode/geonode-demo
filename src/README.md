@@ -10,6 +10,7 @@ GeoNode template project. Generates a django project with GeoNode support.
 -  [Run the instance in development mode](#run-the-instance-in-development-mode)
 -  [Run the instance on a public site](#run-the-instance-on-a-public-site)
 -  [Stop the Docker Images](#stop-the-docker-images)
+-  [Backup and Restore from Docker Images](#backup-and-restore-the-docker-images)
 -  [Recommended: Track your changes](#recommended-track-your-changes)
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
 

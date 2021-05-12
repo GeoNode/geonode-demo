@@ -28,18 +28,32 @@ RUN apt-get update && apt-get install -y \
     firefox-esr \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
+# Prepraing dependencies
+RUN apt-get update && apt-get install -y devscripts build-essential debhelper pkg-kde-tools sharutils
+# RUN git clone https://salsa.debian.org/debian-gis-team/proj.git /tmp/proj
+# RUN cd /tmp/proj && debuild -i -us -uc -b && dpkg -i ../*.deb
+
+# Install pip packages
+RUN pip install pip --upgrade \
+    && pip install pygdal==$(gdal-config --version).* \
+        flower==0.9.4
+
+# Activate "memcached"
+RUN apt install -y memcached
+RUN pip install pylibmc \
+    && pip install sherlock
 
 # add bower and grunt command
-COPY . /usr/src/geonode_master/
+COPY src /usr/src/geonode_master/
 WORKDIR /usr/src/geonode_master
 
-COPY monitoring-cron /etc/cron.d/monitoring-cron
+COPY src/monitoring-cron /etc/cron.d/monitoring-cron
 RUN chmod 0644 /etc/cron.d/monitoring-cron
 RUN crontab /etc/cron.d/monitoring-cron
 RUN touch /var/log/cron.log
 RUN service cron start
 
-COPY wait-for-databases.sh /usr/bin/wait-for-databases
+COPY src/wait-for-databases.sh /usr/bin/wait-for-databases
 RUN chmod +x /usr/bin/wait-for-databases
 RUN chmod +x /usr/src/geonode_master/tasks.py \
     && chmod +x /usr/src/geonode_master/entrypoint.sh
@@ -47,26 +61,11 @@ RUN chmod +x /usr/src/geonode_master/tasks.py \
 COPY celery.sh /usr/bin/celery-commands
 RUN chmod +x /usr/bin/celery-commands
 
-COPY celery-cmd /usr/bin/celery-cmd
+COPY src/celery-cmd /usr/bin/celery-cmd
 RUN chmod +x /usr/bin/celery-cmd
 
-# Prepraing dependencies
-RUN apt-get update && apt-get install -y devscripts build-essential debhelper pkg-kde-tools sharutils
-# RUN git clone https://salsa.debian.org/debian-gis-team/proj.git /tmp/proj
-# RUN cd /tmp/proj && debuild -i -us -uc -b && dpkg -i ../*.deb
-
-# Install pip packages
-RUN pip install pip --upgrade
-RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt \
-    && pip install pygdal==$(gdal-config --version).* \
-    && pip install flower==0.9.4
-
+RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt
 RUN pip install --upgrade  -e .
-
-# Activate "memcached"
-RUN apt install -y memcached
-RUN pip install pylibmc \
-    && pip install sherlock
 
 # Install "geonode-contribs" apps
 RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
@@ -74,4 +73,8 @@ RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b ma
 RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
     cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
 
-ENTRYPOINT /usr/src/geonode_master/entrypoint.sh
+# Export ports
+EXPOSE 8000
+
+# We provide no command or entrypoint as this image can be used to serve the django project or run celery tasks
+# ENTRYPOINT /usr/src/geonode_master/entrypoint.sh
