@@ -58,7 +58,7 @@ RUN chmod +x /usr/bin/wait-for-databases
 RUN chmod +x /usr/src/geonode_master/tasks.py \
     && chmod +x /usr/src/geonode_master/entrypoint.sh
 
-COPY celery.sh /usr/bin/celery-commands
+COPY src/celery.sh /usr/bin/celery-commands
 RUN chmod +x /usr/bin/celery-commands
 
 COPY src/celery-cmd /usr/bin/celery-cmd
