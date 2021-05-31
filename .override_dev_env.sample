@@ -12,7 +12,7 @@ export GEONODE_DATABASE_PASSWORD=geonode
 export GEONODE_GEODATABASE=geonode_master_data
 export GEONODE_GEODATABASE_PASSWORD=geonode
 
-export DATABASE_URL=postgres://geonode_master:geonode@localhost:5432/geonode_master
+export DATABASE_URL=postgis://geonode_master:geonode@localhost:5432/geonode_master
 export GEODATABASE_URL=postgis://geonode_master_data:geonode@localhost:5432/geonode_master_data
 export DEFAULT_BACKEND_DATASTORE=datastore
 
