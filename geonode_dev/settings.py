@@ -30,7 +30,7 @@ except ImportError:
     from urlparse import urlparse, urlunparse
 # Load more settings from a file called local_settings.py if it exists
 try:
-    from geonode_master.local_settings import *
+    from geonode_dev.local_settings import *
 #    from geonode.local_settings import *
 except ImportError:
     from geonode.settings import *
@@ -38,13 +38,13 @@ except ImportError:
 #
 # General Django development settings
 #
-PROJECT_NAME = 'geonode_master'
+PROJECT_NAME = 'geonode_dev'
 
 # add trailing slash to site url. geoserver url will be relative to this
 if not SITEURL.endswith('/'):
     SITEURL = '{}/'.format(SITEURL)
 
-SITENAME = os.getenv("SITENAME", 'geonode_master')
+SITENAME = os.getenv("SITENAME", 'geonode_dev')
 
 # Defines the directory that contains the settings file as the LOCAL_ROOT
 # It is used for relative settings elsewhere.
@@ -96,21 +96,21 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
         'mail_admins': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     "loggers": {
         "django": {
-            "handlers": ["console"], "level": "INFO", },
+            "handlers": ["console"], "level": "ERROR", },
         "geonode": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "INFO", },
         "geoserver-restconfig.catalog": {
             "handlers": ["console"], "level": "ERROR", },
         "owslib": {
@@ -120,9 +120,9 @@ LOGGING = {
         "celery": {
             "handlers": ["console"], "level": "DEBUG", },
         "mapstore2_adapter.plugins.serializers": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "DEBUG", },
         "geonode_logstash.logstash": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "DEBUG", },
     },
 }
 

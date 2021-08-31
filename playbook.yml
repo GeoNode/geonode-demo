@@ -2,11 +2,11 @@
   hosts: production
   remote_user: ubuntu
   vars:
-    app_name: geonode_master
+    app_name: geonode_dev
     github_user: geonode
     server_name: 0.0.0.0
     deploy_user: ubuntu
-    code_repository: https://github.com/-----/geonode_master.git" # e.g., "https://github.com/GeoNode/{{ project_name }}.git"
+    code_repository: https://github.com/-----/geonode_dev.git" # e.g., "https://github.com/GeoNode/geonode_dev.git"
     branch_name: 3.2.x
     virtualenv_dir: "/home/ubuntu/.venvs"
     site_url: "http://localhost:8000/" # The public url of the GeoNode instance
