@@ -51,9 +51,9 @@ from paver.easy import (
 from setuptools.command import easy_install
 
 try:
-    from geonode_dev.local_settings import *
+    from geonode_demo.local_settings import *
 except ImportError:
-    from geonode_dev.settings import *
+    from geonode_demo.settings import *
 
 try:
     from paver.path import pushd
@@ -612,11 +612,11 @@ def start_django(options):
     """
     settings = options.get('settings', '')
     if settings and 'DJANGO_SETTINGS_MODULE' not in settings:
-        settings = 'DJANGO_SETTINGS_MODULE=%s' % settings
+        settings = f'DJANGO_SETTINGS_MODULE={settings}'
     bind = options.get('bind', '0.0.0.0:8000')
     port = bind.split(":")[1]
     foreground = '' if options.get('foreground', False) else '&'
-    sh('%s python -W ignore manage.py runserver %s %s' % (settings, bind, foreground))
+    sh(f'{settings} python -W ignore manage.py runserver {bind} {foreground}')
 
     if ASYNC_SIGNALS:
         scheduler = '--statedb=worker.state -s celerybeat-schedule'
@@ -628,7 +628,7 @@ def start_django(options):
         sh(f'{settings} python -W ignore manage.py runmessaging {foreground}')
 
     # wait for Django to start
-    started = waitfor("http://localhost:" + port)
+    started = waitfor(f"http://localhost:{port}")
     if not started:
         info('Django never started properly or timed out.')
         sys.exit(1)
@@ -991,8 +991,8 @@ def _reset():
         path=os.path.join(settings.PROJECT_ROOT, 'development.db')
     )
     )
-    sh("rm -rf geonode_dev/development.db")
-    sh("rm -rf geonode_dev/uploaded/*")
+    sh("rm -rf geonode_demo/development.db")
+    sh("rm -rf geonode_demo/uploaded/*")
     _install_data_dir()
 
 
@@ -1129,7 +1129,7 @@ def publish(options):
         sh('git push origin %s' % version)
         sh('git tag -f debian/%s' % simple_version)
         sh('git push origin debian/%s' % simple_version)
-        # sh('git push origin 3.2.x')
+        # sh('git push origin 3.3.x')
         sh('python setup.py sdist upload -r pypi')
 
 

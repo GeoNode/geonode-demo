@@ -1,4 +1,4 @@
-# Geonode_Dev
+# Geonode_Demo
 
 GeoNode template project. Generates a django project with GeoNode support.
 
@@ -24,7 +24,7 @@ Available at
 
 ## Create a custom project
 
-**NOTE**: *You can call your geonode project whatever you like following the naming conventions for python packages (generally lower case with underscores (``_``). In the examples below, replace ``geonode_dev`` with whatever you would like to name your project.*
+**NOTE**: *You can call your geonode project whatever you like following the naming conventions for python packages (generally lower case with underscores (``_``). In the examples below, replace ``geonode_demo`` with whatever you would like to name your project.*
 
 ### Using a Python virtual environment
 
@@ -39,12 +39,12 @@ To setup your project using a local python virtual environment, follow these ins
     ```bash
     git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv --python=/usr/bin/python3 geonode_dev
+    mkvirtualenv --python=/usr/bin/python3 geonode_demo
     pip install Django==2.2.12
 
-    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geonode_dev
+    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geonode_demo
 
-    cd geonode_dev
+    cd geonode_demo
     ```
 
 2. Setup the Python Dependencies
@@ -89,12 +89,12 @@ You need Docker 1.12 or higher, get the latest stable official release for your 
     ```bash
     git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv --python=/usr/bin/python3 geonode_dev
+    mkvirtualenv --python=/usr/bin/python3 geonode_demo
     pip install Django==2.2.15
 
-    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geonode_dev
+    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geonode_demo
 
-    cd geonode_dev
+    cd geonode_demo
     ```
 
 2. Run `docker-compose` to start it up (get a cup of coffee or tea while you wait)
@@ -160,7 +160,7 @@ docker system prune -a
 ### Run a Backup
 
 ```bash
-SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/backup.sh $BKP_FOLDER_NAME
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_FOLDER_NAME
 ```
 
 - BKP_FOLDER_NAME:
@@ -177,13 +177,13 @@ SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/backup.sh $BKP_FO
 e.g.:
 
 ```bash
-docker exec -it django4geonode_dev sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/backup.sh $BKP_FOLDER_NAME'
+docker exec -it django4geonode_demo sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_FOLDER_NAME'
 ```
 
 ### Run a Restore
 
 ```bash
-SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/restore.sh $BKP_FOLDER_NAME
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME
 ```
 
 - BKP_FOLDER_NAME:
@@ -200,7 +200,7 @@ SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/restore.sh $BKP_F
 e.g.:
 
 ```bash
-docker exec -it django4geonode_dev sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/restore.sh $BKP_FOLDER_NAME'
+docker exec -it django4geonode_demo sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME'
 ```
 
 ## Recommended: Track your changes
@@ -225,3 +225,14 @@ You may want to configure your requirements.txt, if you are using additional or 
 Django==2.2.12
 git+git://github.com/<your organization>/geonode.git@<your branch>
 ```
+
+## Increasing PostgreSQL Max connections
+
+In case you need to increase the PostgreSQL Max Connections , you can modify
+the **POSTGRESQL_MAX_CONNECTIONS** variable in **.env** file as below:
+
+```
+POSTGRESQL_MAX_CONNECTIONS=200
+```
+
+In this case PostgreSQL will run accepting 200 maximum connections.

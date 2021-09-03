@@ -17,22 +17,34 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #########################################################################
-from django.apps import AppConfig as BaseAppConfig
+import os
+
+from distutils.core import setup
+
+from setuptools import find_packages
 
 
-def run_setup_hooks(*args, **kwargs):
-    from django.conf import settings
-    from .celeryapp import app as celeryapp
-    if celeryapp not in settings.INSTALLED_APPS:
-        settings.INSTALLED_APPS += (celeryapp, )
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-
-class AppConfig(BaseAppConfig):
-
-    name = "geonode_dev"
-    label = "geonode_dev"
-
-    def ready(self):
-        super(AppConfig, self).ready()
-        run_setup_hooks()
-
+setup(
+    name="geonode_demo",
+    version="3.3.0",
+    author="",
+    author_email="",
+    description="geonode_demo, based on GeoNode",
+    long_description=(read('README.md')),
+    # Full list of classifiers can be found at:
+    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        'Development Status :: 1 - Planning',
+    ],
+    license="GPL",
+    keywords="geonode_demo geonode django",
+    url='https://github.com/geonode_demo/geonode_demo',
+    packages=find_packages(),
+    dependency_links=[
+        "git+https://github.com/GeoNode/geonode.git@3.3.x#egg=geonode"
+    ],
+    include_package_data=True,
+)

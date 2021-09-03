@@ -18,14 +18,24 @@
 #
 #########################################################################
 
+from __future__ import absolute_import
+
 import os
+from celery import Celery
 
-__version__ = (3, 3, 0, 'final', 0)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'geonode_demo.settings')
+
+app = Celery('geonode_demo')
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object('django.conf:settings', namespace="CELERY")
+app.autodiscover_tasks()
 
 
-default_app_config = "geonode_dev.apps.AppConfig"
-
-
-def get_version():
-    import geonode_dev.version
-    return geonode_dev.version.get_version(__version__)
+@app.task(
+    bind=True,
+    name='geonode_demo.debug_task',
+    queue='default')
+def debug_task(self):
+    print("Request: {!r}".format(self.request))

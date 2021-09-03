@@ -1,7 +1,7 @@
 #!/bin/sh
 # ##########################################################
 # Run a restore
-#  SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/restore.sh $BKP_FOLDER_NAME
+#  SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME
 #   - BKP_FOLDER_NAME:
 #     Default value = backup_restore
 #     Shared Backup Folder name.
@@ -14,14 +14,14 @@
 #     Target Server URL, the one which must be synched.
 #
 # e.g.:
-#  docker exec -it django4geonode_dev sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/restore.sh $BKP_FOLDER_NAME'
+#  docker exec -it django4geonode_demo sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME'
 # ##########################################################
 
 # Exit script in case of error
 set -e
 
 echo "-----------------------------------------------------"
-echo "STARTING geonode_dev RESTORE $(date)"
+echo "STARTING geonode_demo RESTORE $(date)"
 echo "-----------------------------------------------------"
 
 if [ "$1" != "" ]; then
@@ -41,7 +41,7 @@ else
     echo "$SOURCE_URL --> $TARGET_URL"
 fi
 
-cd /usr/src/geonode_dev/
+cd /usr/src/geonode_demo/
 
 echo "-----------------------------------------------------"
 echo " 1. BACKUP $TARGET_URL"
@@ -49,7 +49,7 @@ echo "-----------------------------------------------------"
 
 NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 mkdir /$BKP_FOLDER_NAME/$NEW_UUID/
-SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_dev/br/backup.sh $BKP_FOLDER_NAME/$NEW_UUID
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_FOLDER_NAME/$NEW_UUID
 
 echo "-----------------------------------------------------"
 echo " 2. CHECK BACKUP.md5 $TARGET_URL"
@@ -93,5 +93,5 @@ fi
 
 echo "-----------------------------------------------------"
 echo " - Original Backup of $TARGET_URL --> /$BKP_FOLDER_NAME/$NEW_UUID/"
-echo "FINISHED geonode_dev RESTORE $(date)"
+echo "FINISHED geonode_demo RESTORE $(date)"
 echo "-----------------------------------------------------"
