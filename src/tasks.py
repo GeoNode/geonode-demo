@@ -239,7 +239,7 @@ def fixtures(ctx):
 --settings={0}".format(_localsettings()), pty=True)
     ctx.run("python manage.py loaddata /tmp/default_site.json \
 --settings={0}".format(_localsettings()), pty=True)
-    ctx.run("python manage.py loaddata /usr/src/geonode_master/fixtures/initial_data.json \
+    ctx.run("python manage.py loaddata /usr/src/geonode_demo/fixtures/initial_data.json \
 --settings={0}".format(_localsettings()), pty=True)
     ctx.run("python manage.py set_all_layers_alternate \
 --settings={0}".format(_localsettings()), pty=True)
@@ -364,7 +364,7 @@ def _update_geodb_connstring():
 
 
 def _localsettings():
-    settings = os.getenv('DJANGO_SETTINGS_MODULE', 'geonode_master.settings')
+    settings = os.getenv('DJANGO_SETTINGS_MODULE', 'geonode_demo.settings')
     return settings
 
 

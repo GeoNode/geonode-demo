@@ -9,7 +9,7 @@ invoke () {
     then
         /usr/local/bin/invoke $@
     else
-        /usr/local/bin/invoke $@ > /usr/src/geonode_master/invoke.log 2>&1
+        /usr/local/bin/invoke $@ > /usr/src/geonode_demo/invoke.log 2>&1
     fi
     echo "$@ tasks done"
 }
@@ -82,12 +82,12 @@ else
             invoke fixtures
             invoke monitoringfixture
             invoke initialized
+            invoke updateadmin
         fi
 
         invoke statics
         invoke waitforgeoserver
         invoke geoserverfixture
-        invoke updateadmin
 
         echo "Executing UWSGI server $cmd for Production"
     fi

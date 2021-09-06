@@ -28,11 +28,11 @@ def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 setup(
-    name="geonode_master",
-    version="3.2",
+    name="geonode_demo",
+    version="3.3.0",
     author="",
     author_email="",
-    description="geonode_master, based on GeoNode",
+    description="geonode_demo, based on GeoNode",
     long_description=(read('README.md')),
     # Full list of classifiers can be found at:
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -40,11 +40,11 @@ setup(
         'Development Status :: 1 - Planning',
     ],
     license="GPL",
-    keywords="geonode_master geonode django",
-    url='https://github.com/geonode_master/geonode_master',
+    keywords="geonode_demo geonode django",
+    url='https://github.com/geonode_demo/geonode_demo',
     packages=find_packages(),
     dependency_links=[
-        "git+https://github.com/GeoNode/geonode.git@3.2.x#egg=geonode"
+        "git+https://github.com/GeoNode/geonode.git@3.3.x#egg=geonode"
     ],
     include_package_data=True,
 )

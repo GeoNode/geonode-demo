@@ -1,7 +1,7 @@
 FROM python:3.8.9-buster
 LABEL GeoNode development team
 
-RUN mkdir -p /usr/src/geonode_master
+RUN mkdir -p /usr/src/geonode_demo
 
 # Enable postgresql-client-13
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
@@ -44,8 +44,8 @@ RUN pip install pylibmc \
     && pip install sherlock
 
 # add bower and grunt command
-COPY src /usr/src/geonode_master/
-WORKDIR /usr/src/geonode_master
+COPY src /usr/src/geonode_demo/
+WORKDIR /usr/src/geonode_demo
 
 COPY src/monitoring-cron /etc/cron.d/monitoring-cron
 RUN chmod 0644 /etc/cron.d/monitoring-cron
@@ -55,8 +55,8 @@ RUN service cron start
 
 COPY src/wait-for-databases.sh /usr/bin/wait-for-databases
 RUN chmod +x /usr/bin/wait-for-databases
-RUN chmod +x /usr/src/geonode_master/tasks.py \
-    && chmod +x /usr/src/geonode_master/entrypoint.sh
+RUN chmod +x /usr/src/geonode_demo/tasks.py \
+    && chmod +x /usr/src/geonode_demo/entrypoint.sh
 
 COPY src/celery.sh /usr/bin/celery-commands
 RUN chmod +x /usr/bin/celery-commands
@@ -64,17 +64,17 @@ RUN chmod +x /usr/bin/celery-commands
 COPY src/celery-cmd /usr/bin/celery-cmd
 RUN chmod +x /usr/bin/celery-cmd
 
-RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt
-RUN pip install --upgrade  -e .
-
 # Install "geonode-contribs" apps
 RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
 # Install logstash and centralized dashboard dependencies
 RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
     cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
 
+RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt
+RUN pip install --upgrade  -e .
+
 # Export ports
 EXPOSE 8000
 
 # We provide no command or entrypoint as this image can be used to serve the django project or run celery tasks
-# ENTRYPOINT /usr/src/geonode_master/entrypoint.sh
+# ENTRYPOINT /usr/src/geonode_demo/entrypoint.sh
