@@ -63,3 +63,4 @@ local_settings.py
 
 .idea/
 .vscode/
+.env
