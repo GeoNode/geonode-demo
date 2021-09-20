@@ -15,8 +15,6 @@ x-common-django:
     - backup-restore:/backup_restore
     - data:/data
     - tmp:/tmp
-  extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
 services:
 
@@ -37,8 +35,6 @@ services:
       - IS_CELERY=False
     entrypoint: ["/usr/src/geonode_demo/entrypoint.sh"]
     command: "uwsgi --ini /usr/src/geonode_demo/uwsgi.ini"
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   # Celery worker that executes celery tasks created by Django.
   celery:
@@ -51,8 +47,6 @@ services:
       - IS_CELERY=True
     entrypoint: ["/usr/src/geonode_demo/entrypoint.sh"]
     command: "celery-cmd"
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   # Nginx is serving django static and media files and proxies to django and geonode
   geonode:
@@ -74,8 +68,6 @@ services:
       - nginx-certificates:/geonode-certificates
       - statics:/mnt/volumes/statics
     restart: on-failure
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   # Gets and installs letsencrypt certificates
   letsencrypt:
@@ -90,12 +82,10 @@ services:
     volumes:
       - nginx-certificates:/geonode-certificates
     restart: on-failure
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   # Geoserver backend
   geoserver:
-    image: geonode/geoserver:2.18.2
+    image: geonode/geoserver:2.19.x
     build: ./docker/geoserver/
     container_name: geoserver4${COMPOSE_PROJECT_NAME}
     healthcheck:
@@ -113,11 +103,9 @@ services:
       - data:/data
       - tmp:/tmp
     restart: on-failure
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   data-dir-conf:
-    image: geonode/geoserver_data:2.18.2
+    image: geonode/geoserver_data:2.19.x
     container_name: gsconf4${COMPOSE_PROJECT_NAME}
     command: /bin/true
     volumes:
@@ -139,8 +127,6 @@ services:
     # uncomment to enable remote connections to postgres
     #ports:
     #  - "5432:5432"
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
   # Vanilla RabbitMQ service. This is needed by celery
   rabbitmq:
@@ -166,8 +152,6 @@ services:
       - data:/data
     environment:
       - 'JENKINS_OPTS=--httpPort=${JENKINS_HTTP_PORT} --httpsPort=${JENKINS_HTTPS_PORT} --prefix=/jenkins'
-    extra_hosts:
-      - "development.demo.geonode.org:192.95.15.236"
 
 volumes:
   jenkins_data:
