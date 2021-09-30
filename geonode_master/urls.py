@@ -18,14 +18,21 @@
 #
 #########################################################################
 
-import os
+from django.conf.urls import url, include
+from django.views.generic import TemplateView
 
-__version__ = (3, 0, 0, 'final', 0)
+from geonode.urls import urlpatterns
+from geonode.base import register_url_event
 
+urlpatterns += [
+## include your urls here
 
-default_app_config = "geonode_master.apps.AppConfig"
+]
 
+homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))
 
-def get_version():
-    import geonode_master.version
-    return geonode_master.version.get_version(__version__)
+urlpatterns = [
+    url(r'^/?$',
+        homepage,
+        name='home'),
+ ] + urlpatterns
