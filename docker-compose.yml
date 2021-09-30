@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   db:
-    image: geonode/postgis:13
+    image: geonode/postgis:11
     command: postgres -c "max_connections=${POSTGRESQL_MAX_CONNECTIONS}"
     restart: unless-stopped
     container_name: db4${COMPOSE_PROJECT_NAME}
