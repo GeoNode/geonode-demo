@@ -1,7 +1,7 @@
 FROM python:3.8.9-buster
 LABEL GeoNode development team
 
-RUN mkdir -p /usr/src/geonode_demo
+RUN mkdir -p /usr/src/geonode_master
 
 # Enable postgresql-client-13
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -y \
 
 
 # add bower and grunt command
-COPY . /usr/src/geonode_demo/
-WORKDIR /usr/src/geonode_demo
+COPY . /usr/src/geonode_master/
+WORKDIR /usr/src/geonode_master
 
 COPY monitoring-cron /etc/cron.d/monitoring-cron
 RUN chmod 0644 /etc/cron.d/monitoring-cron
@@ -41,8 +41,8 @@ RUN service cron start
 
 COPY wait-for-databases.sh /usr/bin/wait-for-databases
 RUN chmod +x /usr/bin/wait-for-databases
-RUN chmod +x /usr/src/geonode_demo/tasks.py \
-    && chmod +x /usr/src/geonode_demo/entrypoint.sh
+RUN chmod +x /usr/src/geonode_master/tasks.py \
+    && chmod +x /usr/src/geonode_master/entrypoint.sh
 
 COPY celery.sh /usr/bin/celery-commands
 RUN chmod +x /usr/bin/celery-commands
@@ -74,4 +74,4 @@ RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b ma
 RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
     cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
 
-ENTRYPOINT /usr/src/geonode_demo/entrypoint.sh
+ENTRYPOINT /usr/src/geonode_master/entrypoint.sh

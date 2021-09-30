@@ -52,12 +52,12 @@ services:
       - db
       - elasticsearch
       - rabbitmq
-    command: celery --app=geonode_demo.celeryapp:app worker --without-gossip --without-mingle -Ofair -B -l INFO
+    command: celery --app=geonode_master.celeryapp:app worker --without-gossip --without-mingle -Ofair -B -l INFO
     volumes:
       - statics:/mnt/volumes/statics
       - geoserver-data-dir:/geoserver_data/data
     environment:
-      DJANGO_SETTINGS_MODULE: geonode_demo.settings
+      DJANGO_SETTINGS_MODULE: geonode_master.settings
       GEONODE_INSTANCE_NAME: geonode
       GEONODE_LB_HOST_IP:
       GEONODE_LB_PORT:
@@ -140,7 +140,7 @@ services:
       - statics:/mnt/volumes/statics
       - geoserver-data-dir:/geoserver_data/data
     environment:
-      DJANGO_SETTINGS_MODULE: geonode_demo.settings
+      DJANGO_SETTINGS_MODULE: geonode_master.settings
       GEONODE_INSTANCE_NAME: geonode
       GEONODE_LB_HOST_IP:
       GEONODE_LB_PORT:

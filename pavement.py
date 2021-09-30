@@ -51,9 +51,9 @@ from paver.easy import (
 from setuptools.command import easy_install
 
 try:
-    from geonode_demo.local_settings import *
+    from geonode_master.local_settings import *
 except ImportError:
-    from geonode_demo.settings import *
+    from geonode_master.settings import *
 
 try:
     from paver.path import pushd
@@ -991,8 +991,8 @@ def _reset():
         path=os.path.join(settings.PROJECT_ROOT, 'development.db')
     )
     )
-    sh("rm -rf geonode_demo/development.db")
-    sh("rm -rf geonode_demo/uploaded/*")
+    sh("rm -rf geonode_master/development.db")
+    sh("rm -rf geonode_master/uploaded/*")
     _install_data_dir()
 
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 #########################################################################
 #
@@ -20,12 +18,21 @@
 #
 #########################################################################
 
-import os
-import sys
+from django.conf.urls import url, include
+from django.views.generic import TemplateView
 
+from geonode.urls import urlpatterns
+from geonode.base import register_url_event
 
-if __name__ == "__main__":
-    from django.core.management import execute_from_command_line
+urlpatterns += [
+## include your urls here
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geonode_master.settings")
-    execute_from_command_line(sys.argv)
+]
+
+homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))
+
+urlpatterns = [
+    url(r'^/?$',
+        homepage,
+        name='home'),
+ ] + urlpatterns
