@@ -6,14 +6,14 @@ export SITEURL=http://localhost:8000/
 export ALLOWED_HOSTS="['localhost',]"
 
 export GEONODE_INSTANCE_NAME=geonode
-export DJANGO_SETTINGS_MODULE=geonode_master.settings
-export GEONODE_DATABASE=geonode_master
+export DJANGO_SETTINGS_MODULE=geonode_demo.settings
+export GEONODE_DATABASE=geonode_demo
 export GEONODE_DATABASE_PASSWORD=geonode
-export GEONODE_GEODATABASE=geonode_master_data
+export GEONODE_GEODATABASE=geonode_demo_data
 export GEONODE_GEODATABASE_PASSWORD=geonode
 
-export DATABASE_URL=postgis://geonode_master:geonode@localhost:5432/geonode_master
-export GEODATABASE_URL=postgis://geonode_master_data:geonode@localhost:5432/geonode_master_data
+export DATABASE_URL=postgis://geonode_demo:geonode@localhost:5432/geonode_demo
+export GEODATABASE_URL=postgis://geonode_demo_data:geonode@localhost:5432/geonode_demo_data
 export DEFAULT_BACKEND_DATASTORE=datastore
 
 export GEOSERVER_WEB_UI_LOCATION=http://localhost:8080/geoserver/
@@ -47,7 +47,7 @@ export DEFAULT_FROM_EMAIL="GeoNode <no-reply@geonode.org>"
 
 export LOCKDOWN_GEONODE=False
 export CORS_ORIGIN_ALLOW_ALL=True
-export X_FRAME_OPTIONS=ALLOW-FROM ALL
+export X_FRAME_OPTIONS=SAMEORIGIN
 export SESSION_EXPIRED_CONTROL_ENABLED=True
 export DEFAULT_ANONYMOUS_VIEW_PERMISSION=True
 export DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION=True

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 #########################################################################
 #
@@ -20,12 +18,24 @@
 #
 #########################################################################
 
+from __future__ import absolute_import
+
 import os
-import sys
+from celery import Celery
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'geonode_demo.settings')
+
+app = Celery('geonode_demo')
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object('django.conf:settings', namespace="CELERY")
+app.autodiscover_tasks()
 
 
-if __name__ == "__main__":
-    from django.core.management import execute_from_command_line
-
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geonode_master.settings")
-    execute_from_command_line(sys.argv)
+@app.task(
+    bind=True,
+    name='geonode_demo.debug_task',
+    queue='default')
+def debug_task(self):
+    print("Request: {!r}".format(self.request))

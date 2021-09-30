@@ -51,9 +51,9 @@ from paver.easy import (
 from setuptools.command import easy_install
 
 try:
-    from geonode_master.local_settings import *
+    from geonode_demo.local_settings import *
 except ImportError:
-    from geonode_master.settings import *
+    from geonode_demo.settings import *
 
 try:
     from paver.path import pushd
@@ -618,20 +618,14 @@ def start_django(options):
     foreground = '' if options.get('foreground', False) else '&'
     sh('%s python -W ignore manage.py runserver %s %s' % (settings, bind, foreground))
 
-    if 'django_celery_beat' not in INSTALLED_APPS:
-        sh("{} celery -A geonode.celery_app:app worker --without-gossip --without-mingle -Ofair -B -E --statedb=worker.state -s celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h {}".format(
-            settings,
-            foreground
-        ))
-    else:
-        sh("{} celery -A geonode.celery_app:app worker -l DEBUG {} {}".format(
-            settings,
-            "-s django_celery_beat.schedulers:DatabaseScheduler",
-            foreground
-        ))
-
     if ASYNC_SIGNALS:
-        sh('%s python -W ignore manage.py runmessaging %s' % (settings, foreground))
+        scheduler = '--statedb=worker.state -s celerybeat-schedule'
+        if 'django_celery_beat' in INSTALLED_APPS:
+            scheduler = '-s django_celery_beat.schedulers:DatabaseScheduler'
+        sh(f"{settings} celery -A geonode.celery_app:app worker --without-gossip --without-mingle -Ofair -B -E \
+            {scheduler} --loglevel=DEBUG \
+            --concurrency=2 -n worker1@%h -f celery.log {foreground}")
+        sh(f'{settings} python -W ignore manage.py runmessaging {foreground}')
 
     # wait for Django to start
     started = waitfor("http://localhost:" + port)
@@ -997,8 +991,8 @@ def _reset():
         path=os.path.join(settings.PROJECT_ROOT, 'development.db')
     )
     )
-    sh("rm -rf geonode_master/development.db")
-    sh("rm -rf geonode_master/uploaded/*")
+    sh("rm -rf geonode_demo/development.db")
+    sh("rm -rf geonode_demo/uploaded/*")
     _install_data_dir()
 
 

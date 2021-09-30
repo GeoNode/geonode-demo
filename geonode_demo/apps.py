@@ -29,8 +29,8 @@ def run_setup_hooks(*args, **kwargs):
 
 class AppConfig(BaseAppConfig):
 
-    name = "geonode_master"
-    label = "geonode_master"
+    name = "geonode_demo"
+    label = "geonode_demo"
 
     def ready(self):
         super(AppConfig, self).ready()
