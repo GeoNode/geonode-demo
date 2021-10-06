@@ -29,7 +29,7 @@ def read(*rnames):
 
 setup(
     name="geonode_master",
-    version="3.2",
+    version="4.0.0",
     author="",
     author_email="",
     description="geonode_master, based on GeoNode",
@@ -44,7 +44,7 @@ setup(
     url='https://github.com/geonode_master/geonode_master',
     packages=find_packages(),
     dependency_links=[
-        "git+https://github.com/GeoNode/geonode.git@3.2.x#egg=geonode"
+        "git+https://github.com/GeoNode/geonode.git#egg=geonode"
     ],
     include_package_data=True,
 )
