@@ -4,6 +4,7 @@ RUN apk add --no-cache openssl inotify-tools
 
 WORKDIR /etc/nginx/
 
+ADD 50x.html /usr/share/nginx/html/
 ADD nginx.conf.envsubst nginx.https.available.conf.envsubst ./
 ADD geonode.conf.envsubst ./sites-enabled/
 

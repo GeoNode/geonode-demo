@@ -25,6 +25,11 @@ http {
         listen              $HTTP_PORT;
         server_name         $HTTP_HOST 127.0.0.1 geonode;
 
+        error_page   500 502 503 504  /50x.html;
+    location  = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
         include sites-enabled/*.conf;
     }
 
