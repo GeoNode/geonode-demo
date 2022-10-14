@@ -164,5 +164,6 @@ IMPORTER_HANDLERS = os.getenv('IMPORTER_HANDLERS', [
     'importer.handlers.gpkg.handler.GPKGFileHandler',
     'importer.handlers.geojson.handler.GeoJsonFileHandler',
     'importer.handlers.shapefile.handler.ShapeFileHandler',
-    'importer.handlers.kml.handler.KMLFileHandler'
+    'importer.handlers.kml.handler.KMLFileHandler',
+    'importer.handlers.geotiff.handler.GeoTiffFileHandler'
 ])
