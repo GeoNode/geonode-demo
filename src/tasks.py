@@ -187,8 +187,6 @@ def migrations(ctx):
     print("**************************migrations*******************************")
     ctx.run(f"python manage.py migrate --noinput --settings={_localsettings()}", pty=True)
     try:
-        if os.environ.get('MONITORING_ENABLED', False):
-            ctx.run(f"python manage.py updategeoip --settings={_localsettings()}", pty=True)
         ctx.run(f"python manage.py rebuild_index --noinput --settings={_localsettings()}", pty=True)
     except Exception:
         pass
@@ -197,8 +195,12 @@ def migrations(ctx):
 @task
 def statics(ctx):
     print("**************************statics*******************************")
-    ctx.run('mkdir -p /mnt/volumes/statics/{static,uploads}')
-    ctx.run(f"python manage.py collectstatic --noinput --settings={_localsettings()}", pty=True)
+    try:
+        ctx.run('mkdir -p /mnt/volumes/statics/{static,uploads}')
+        ctx.run(f"python manage.py collectstatic --noinput --settings={_localsettings()}", pty=True)
+    except Exception:
+        import traceback
+        traceback.print_exc()
 
 
 @task
@@ -241,9 +243,9 @@ def fixtures(ctx):
 --settings={0}".format(_localsettings()), pty=True)
     ctx.run("python manage.py loaddata /usr/src/geonode_demo/fixtures/initial_data.json \
 --settings={0}".format(_localsettings()), pty=True)
-    ctx.run("python manage.py set_all_layers_alternate \
+    ctx.run("python manage.py set_all_datasets_alternate \
 --settings={0}".format(_localsettings()), pty=True)
-#     ctx.run("python manage.py set_all_layers_metadata -d \
+#     ctx.run("python manage.py set_all_datasets_metadata -d \
 # --settings={0}".format(_localsettings()), pty=True)
 
 
@@ -275,7 +277,7 @@ def monitoringfixture(ctx):
 @task
 def updategeoip(ctx):
     print("**************************update geoip*******************************")
-    if os.environ.get('MONITORING_ENABLED', False):
+    if ast.literal_eval(os.environ.get('MONITORING_ENABLED', 'False')):
         ctx.run(f"django-admin.py updategeoip --settings={_localsettings()}", pty=True)
 
 
