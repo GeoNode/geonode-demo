@@ -161,11 +161,11 @@ DATABASE_ROUTERS = ["importer.db_router.DatastoreRouter"]
 
 SIZE_RESTRICTED_FILE_UPLOAD_ELEGIBLE_URL_NAMES += ('importer_upload',)
 
-IMPORTER_HANDLERS = ast.literal_eval(os.getenv('IMPORTER_HANDLERS', [
-    'importer.handlers.csv.handler.CSVFileHandler',
-    'importer.handlers.gpkg.handler.GPKGFileHandler',
-    'importer.handlers.geojson.handler.GeoJsonFileHandler',
-    'importer.handlers.shapefile.handler.ShapeFileHandler',
-    'importer.handlers.kml.handler.KMLFileHandler',
-    'importer.handlers.geotiff.handler.GeoTiffFileHandler'
-]))
+IMPORTER_HANDLERS = ast.literal_eval(os.getenv('IMPORTER_HANDLERS', "[\
+    'importer.handlers.gpkg.handler.GPKGFileHandler',\
+    'importer.handlers.geojson.handler.GeoJsonFileHandler',\
+    'importer.handlers.shapefile.handler.ShapeFileHandler',\
+    'importer.handlers.kml.handler.KMLFileHandler',\
+    'importer.handlers.csv.handler.CSVFileHandler',\
+    'importer.handlers.geotiff.handler.GeoTiffFileHandler'\
+]"))
