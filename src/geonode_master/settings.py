@@ -154,18 +154,19 @@ CELERY_TASK_QUEUES += (
     Queue('importer.copy_geonode_resource', GEONODE_EXCHANGE, routing_key='importer.copy_geonode_resource', max_priority=0),
     Queue('importer.copy_dynamic_model', GEONODE_EXCHANGE, routing_key='importer.copy_dynamic_model'),
     Queue('importer.copy_geonode_data_table', GEONODE_EXCHANGE, routing_key='importer.copy_geonode_data_table'),
-    Queue('importer.copy_raster_file', GEONODE_EXCHANGE, routing_key='importer.copy_raster_file'),    
+    Queue('importer.copy_raster_file', GEONODE_EXCHANGE, routing_key='importer.copy_raster_file'),
+    Queue('importer.rollback', GEONODE_EXCHANGE, routing_key='importer.rollback'),
 )
 
 DATABASE_ROUTERS = ["importer.db_router.DatastoreRouter"]
 
 SIZE_RESTRICTED_FILE_UPLOAD_ELEGIBLE_URL_NAMES += ('importer_upload',)
 
-IMPORTER_HANDLERS = ast.literal_eval(os.getenv('IMPORTER_HANDLERS', "[\
-    'importer.handlers.gpkg.handler.GPKGFileHandler',\
-    'importer.handlers.geojson.handler.GeoJsonFileHandler',\
-    'importer.handlers.shapefile.handler.ShapeFileHandler',\
-    'importer.handlers.kml.handler.KMLFileHandler',\
-    'importer.handlers.csv.handler.CSVFileHandler',\
-    'importer.handlers.geotiff.handler.GeoTiffFileHandler'\
-]"))
+IMPORTER_HANDLERS = os.getenv('IMPORTER_HANDLERS', [
+    'importer.handlers.gpkg.handler.GPKGFileHandler',
+    'importer.handlers.geojson.handler.GeoJsonFileHandler',
+    'importer.handlers.shapefile.handler.ShapeFileHandler',
+    'importer.handlers.kml.handler.KMLFileHandler',
+    'importer.handlers.csv.handler.CSVFileHandler',
+    'importer.handlers.geotiff.handler.GeoTiffFileHandler'
+])
