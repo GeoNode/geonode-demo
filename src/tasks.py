@@ -408,8 +408,8 @@ def _geoserver_info_provision(url):
     print("Setting GeoServer Admin Password...")
     cat = Catalog(
         url,
-        username=settings.OGC_SERVER_DEFAULT_USER,
-        password=settings.OGC_SERVER_DEFAULT_PASSWORD
+        username=settings.GEOSERVER_ADMIN_USER,
+        password=settings.GEOSERVER_ADMIN_PASSWORD
     )
     headers = {
         "Content-type": "application/xml",
