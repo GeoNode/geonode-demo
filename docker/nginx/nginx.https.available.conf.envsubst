@@ -7,7 +7,7 @@ ssl_session_timeout 10m;
 
 # this is the actual HTTPS host
 server {
-    listen              $HTTPS_PORT ssl;
+    listen              443 ssl;
     server_name         $HTTPS_HOST;
     keepalive_timeout   70;
 
@@ -15,11 +15,6 @@ server {
     ssl_certificate_key /certificate_symlink/privkey.pem;
     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers         HIGH:!aNULL:!MD5;
-
-    error_page   500 502 503 504  /50x.html;
-    location  = /50x.html {
-        root   /usr/share/nginx/html;
-    }
 
     include sites-enabled/*.conf;
 }
@@ -33,11 +28,6 @@ server {
     location /.well-known {
         alias /geonode-certificates/.well-known;
         include  /etc/nginx/mime.types;
-    }
-
-    error_page   500 502 503 504  /50x.html;
-    location  = /50x.html {
-        root   /usr/share/nginx/html;
     }
 
     # Redirect to https

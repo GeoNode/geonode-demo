@@ -1,10 +1,12 @@
-FROM nginx:1.23.2-alpine
+FROM nginx:1.25.1-alpine
 
-RUN apk add --no-cache openssl inotify-tools
+RUN apk add --no-cache openssl inotify-tools vim
 
 WORKDIR /etc/nginx/
 
-ADD 50x.html /usr/share/nginx/html/
+RUN mkdir -p /etc/nginx/html &&\
+    touch /etc/nginx/html/index.html
+
 ADD nginx.conf.envsubst nginx.https.available.conf.envsubst ./
 ADD geonode.conf.envsubst ./sites-enabled/
 
