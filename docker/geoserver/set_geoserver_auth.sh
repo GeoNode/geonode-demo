@@ -21,6 +21,9 @@ echo -e "OAUTH2_CLIENT_ID=$OAUTH2_CLIENT_ID\n"
 echo -e "OAUTH2_CLIENT_SECRET=$OAUTH2_CLIENT_SECRET\n"
 echo -e "GEOSERVER_LOCATION=$GEOSERVER_LOCATION\n"
 echo -e "GEONODE_LOCATION=$GEONODE_LOCATION\n"
+echo -e "GEONODE_GEODATABASE=$GEONODE_GEODATABASE\n"
+echo -e "GEONODE_GEODATABASE_USER=$GEONODE_GEODATABASE_USER\n"
+echo -e "GEONODE_GEODATABASE_PASSWORD=$GEONODE_GEODATABASE_PASSWORD\n"
 echo -e "auth_conf_source=$auth_conf_source\n"
 echo -e "auth_conf_target=$auth_conf_target\n"
 
@@ -61,10 +64,10 @@ do
             newvalue=`echo -ne "$tagvalue" | sed -re "s@.*@$OAUTH2_CLIENT_SECRET@"`;;
         proxyBaseUrl | redirectUri | userAuthorizationUri | logoutUri )
             echo "DEBUG: Editing '$auth_conf_source' for tagname <$i> and replacing its value with '$GEOSERVER_LOCATION'"
-            newvalue=`echo -ne "$tagvalue" | sed -re "s@^(https?://[^/]+)@$GEOSERVER_LOCATION@"`;;
+            newvalue=`echo -ne "$tagvalue" | sed -re "s@^(https?://[^/]+)@${GEOSERVER_LOCATION%/}@"`;;
         baseUrl | accessTokenUri | checkTokenEndpointUrl )
             echo "DEBUG: Editing '$auth_conf_source' for tagname <$i> and replacing its value with '$GEONODE_LOCATION'"
-            newvalue=`echo -ne "$tagvalue" | sed -re "s@^(https?://[^/]+)@$GEONODE_LOCATION@"`;;
+            newvalue=`echo -ne "$tagvalue" | sed -re "s@^(https?://[^/]+)@${GEONODE_LOCATION%/}@"`;;
         *) echo -n "an unknown variable has been found";;
     esac
 
