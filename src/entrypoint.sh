@@ -14,9 +14,8 @@ invoke () {
     echo "$@ tasks done"
 }
 
-# Start cron && memcached services
+# Start cron services
 service cron restart
-service memcached restart
 
 echo $"\n\n\n"
 echo "-----------------------------------------------------"
