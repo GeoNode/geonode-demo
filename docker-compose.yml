@@ -176,22 +176,32 @@ services:
 
 volumes:
   statics:
-    name: ${COMPOSE_PROJECT_NAME}-statics
+    name: geonode_master-statics
+    external: true
   nginx-confd:
-    name: ${COMPOSE_PROJECT_NAME}-nginxconfd
+    name: geonode_master-nginxconfd
+    external: true
   nginx-certificates:
-    name: ${COMPOSE_PROJECT_NAME}-nginxcerts
+    name: geonode_master-nginxcerts
+    external: true
   geoserver-data-dir:
-    name: ${COMPOSE_PROJECT_NAME}-gsdatadir
+    name: geonode_master-gsdatadir
+    external: true
   dbdata:
-    name: ${COMPOSE_PROJECT_NAME}-dbdata
+    name: geonode_master-dbdata
+    external: true
   dbbackups:
-    name: ${COMPOSE_PROJECT_NAME}-dbbackups
+    name: geonode_master-dbbackups
+    external: true
   backup-restore:
-    name: ${COMPOSE_PROJECT_NAME}-backup-restore
+    name: geonode_master-backup-restore
+    external: true
   data:
-    name: ${COMPOSE_PROJECT_NAME}-data
+    name: geonode_master-data
+    external: true
   tmp:
-    name: ${COMPOSE_PROJECT_NAME}-tmp
+    name: geonode_master-tmp
+    external: true
   rabbitmq:
-    name: ${COMPOSE_PROJECT_NAME}-rabbitmq
+    name: geonode_master-rabbitmq
+    external: true
