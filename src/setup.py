@@ -27,24 +27,23 @@ from setuptools import find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
+
 setup(
     name="geonode_demo",
     version="4.0.0",
     author="",
     author_email="",
     description="geonode_demo, based on GeoNode",
-    long_description=(read('README.md')),
+    long_description=(read("README.md")),
     # Full list of classifiers can be found at:
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-        'Development Status :: 1 - Planning',
+        "Development Status :: 1 - Planning",
     ],
     license="GPL",
     keywords="geonode_demo geonode django",
-    url='https://github.com/geonode_demo/geonode_demo',
+    url="https://github.com/geonode_demo/geonode_demo",
     packages=find_packages(),
-    dependency_links=[
-        "git+https://github.com/GeoNode/geonode.git@3.3.x#egg=geonode"
-    ],
+    dependency_links=["git+https://github.com/GeoNode/geonode.git#egg=geonode"],
     include_package_data=True,
 )
