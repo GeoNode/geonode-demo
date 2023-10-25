@@ -179,11 +179,9 @@ volumes:
     name: geonode_master-statics
     external: true
   nginx-confd:
-    name: geonode_master-nginxconfd
-    external: true
+    name: ${COMPOSE_PROJECT_NAME}-nginxconfd
   nginx-certificates:
-    name: geonode_master-nginxcerts
-    external: true
+    name: ${COMPOSE_PROJECT_NAME}-nginxcerts
   geoserver-data-dir:
     name: geonode_master-gsdatadir
     external: true
