@@ -29,11 +29,11 @@ def read(*rnames):
 
 
 setup(
-    name="geonode_master",
+    name="geonode_demo",
     version="4.0.0",
     author="",
     author_email="",
-    description="geonode_master, based on GeoNode",
+    description="geonode_demo, based on GeoNode",
     long_description=(read("README.md")),
     # Full list of classifiers can be found at:
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -41,8 +41,8 @@ setup(
         "Development Status :: 1 - Planning",
     ],
     license="GPL",
-    keywords="geonode_master geonode django",
-    url="https://github.com/geonode_master/geonode_master",
+    keywords="geonode_demo geonode django",
+    url="https://github.com/geonode_demo/geonode_demo",
     packages=find_packages(),
     dependency_links=["git+https://github.com/GeoNode/geonode.git#egg=geonode"],
     include_package_data=True,

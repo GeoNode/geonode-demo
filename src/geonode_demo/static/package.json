@@ -1,8 +1,8 @@
 {
-  "name": "geonode_master",
+  "name": "geonode_demo",
   "version": "0.0.1",
   "author": "GeoNode Developers",
-  "description": "Static code and assets for geonode_master",
+  "description": "Static code and assets for geonode_demo",
   "contributors": [
     {
     }

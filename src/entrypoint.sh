@@ -9,12 +9,12 @@ invoke () {
     then
         /usr/local/bin/invoke $@
     else
-        /usr/local/bin/invoke $@ > /usr/src/geonode_master/invoke.log 2>&1
+        /usr/local/bin/invoke $@ > /usr/src/geonode_demo/invoke.log 2>&1
     fi
     echo "$@ tasks done"
 }
 
-# Start cron services
+# Start cron service
 service cron restart
 
 echo $"\n\n\n"
@@ -69,6 +69,6 @@ echo "-----------------------------------------------------"
 echo "FINISHED DJANGO ENTRYPOINT --------------------------"
 echo "-----------------------------------------------------"
 
-# Run the CMD 
+# Run the CMD
 echo "got command $cmd"
 exec $cmd
