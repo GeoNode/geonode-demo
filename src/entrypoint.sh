@@ -9,14 +9,13 @@ invoke () {
     then
         /usr/local/bin/invoke $@
     else
-        /usr/local/bin/invoke $@ >> /usr/src/geonode_demo/invoke.log 2>&1
+        /usr/local/bin/invoke $@ > /usr/src/geonode_demo/invoke.log 2>&1
     fi
     echo "$@ tasks done"
 }
 
-# Start cron && memcached services
+# Start cron service
 service cron restart
-service memcached restart
 
 echo $"\n\n\n"
 echo "-----------------------------------------------------"
@@ -41,63 +40,35 @@ echo MONITORING_HOST_NAME=$MONITORING_HOST_NAME
 echo MONITORING_SERVICE_NAME=$MONITORING_SERVICE_NAME
 echo MONITORING_DATA_TTL=$MONITORING_DATA_TTL
 
-invoke waitfordbs
+# invoke waitfordbs
 
 cmd="$@"
 
-echo DOCKER_ENV=$DOCKER_ENV
-
-if [ -z ${DOCKER_ENV} ] || [ ${DOCKER_ENV} = "development" ]
+if [ ${IS_CELERY} = "true" ]  || [ ${IS_CELERY} = "True" ]
 then
+    echo "Executing Celery server $cmd for Production"
+else
 
     invoke migrations
     invoke prepare
-    invoke fixtures
 
-    if [ ${IS_CELERY} = "true" ] || [ ${IS_CELERY} = "True" ]
-    then
-
-        echo "Executing Celery server $cmd for Development"
-
-    else
-
-        invoke devrequirements
-        invoke statics
-
-        echo "Executing standard Django server $cmd for Development"
-
+    if [ ${FORCE_REINIT} = "true" ]  || [ ${FORCE_REINIT} = "True" ] || [ ! -e "/mnt/volumes/statics/geonode_init.lock" ]; then
+        invoke updategeoip
+        invoke fixtures
+        invoke monitoringfixture
+        invoke initialized
+        invoke updateadmin
     fi
 
-else
-    if [ ${IS_CELERY} = "true" ]  || [ ${IS_CELERY} = "True" ]
-    then
-        echo "Executing Celery server $cmd for Production"
-    else
+    invoke statics
 
-        invoke migrations
-        invoke prepare
-
-        if [ ${FORCE_REINIT} = "true" ]  || [ ${FORCE_REINIT} = "True" ] || [ ! -e "/mnt/volumes/statics/geonode_init.lock" ]; then
-            echo "LOG INIT" > /usr/src/geonode_demo/invoke.log
-            invoke updategeoip
-            invoke fixtures
-            invoke monitoringfixture
-            invoke initialized
-            invoke updateadmin
-        fi
-
-        invoke statics
-        invoke waitforgeoserver
-        invoke geoserverfixture
-
-        echo "Executing UWSGI server $cmd for Production"
-    fi
+    echo "Executing UWSGI server $cmd for Production"
 fi
 
 echo "-----------------------------------------------------"
 echo "FINISHED DJANGO ENTRYPOINT --------------------------"
 echo "-----------------------------------------------------"
 
-# Run the CMD 
+# Run the CMD
 echo "got command $cmd"
 exec $cmd
