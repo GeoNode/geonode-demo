@@ -1,1 +1,1 @@
-# Geonode_Master
+# Geonode_Demo
