@@ -498,14 +498,12 @@ address {ip_list[0]}"
         )
     return ip_list[0]
 
-
 def _is_valid_ip(ip):
     try:
         ipaddress.IPv4Address(ip)
         return True
     except Exception as e:
         return False
-
 
 def _container_exposed_port(component, instname):
     port = "80"
