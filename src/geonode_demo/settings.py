@@ -95,9 +95,18 @@ LOGGING = {
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "handlers": {
         "console": {
-            "level": "ERROR",
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "simple",
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'formatter': 'simple',
+            'filename': '/tmp/geonode.log',
+            'mode': 'a',
+            'maxBytes': 10485760,
+            'backupCount': 10,
         },
         "mail_admins": {
             "level": "ERROR",
@@ -112,7 +121,7 @@ LOGGING = {
         },
         "geonode": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "WARNING",
         },
         "geoserver-restconfig.catalog": {
             "handlers": ["console"],
@@ -138,6 +147,10 @@ LOGGING = {
             "handlers": ["console"],
             "level": "DEBUG",
         },
+        "geonode_demo.middleware": {
+            "handlers": ["file"],
+            "level": "INFO",
+        }
     },
 }
 
@@ -159,6 +172,8 @@ if (
 LDAP_ENABLED = ast.literal_eval(os.getenv("LDAP_ENABLED", "False"))
 if LDAP_ENABLED and "geonode_ldap" not in INSTALLED_APPS:
     INSTALLED_APPS += ("geonode_ldap",)
+    
+MIDDLEWARE += ("geonode_demo.middleware.LogRequestMiddleware",)
 
 # Add your specific LDAP configuration after this comment:
 # https://docs.geonode.org/en/master/advanced/contrib/#configuration
