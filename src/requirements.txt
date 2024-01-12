@@ -1,3 +1,7 @@
--e git+https://github.com/GeoNode/geonode-mapstore-client.git@master#egg=django_geonode_mapstore_client
--e git+https://github.com/GeoNode/geonode-importer.git@master#egg=geonode-importer
--e git+https://github.com/GeoNode/geonode.git@master#egg=GeoNode
+-e git+https://github.com/GeoNode/geonode-mapstore-client.git@django_upgrade#egg=django_geonode_mapstore_client
+-e git+https://github.com/GeoNode/geonode-importer.git@django_upgrade#egg=geonode-importer
+-e git+https://github.com/GeoNode/geonode.git@ISSUE_11821#egg=GeoNode
+-e git+https://github.com/GeoNode/dynamic-rest.git@master#egg=dynamic_rest
+-e git+https://github.com/GeoNode/pinax-notifications.git@django_upgrade#egg=pinax-notifications
+-e git+https://github.com/GeoNode/geonode-user-messages.git@django_upgrade#egg=geonode-user-messages
+-e git+https://github.com/GeoNode/geonode-announcements.git@django_upgrade#egg=geonode-announcements
