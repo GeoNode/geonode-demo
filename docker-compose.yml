@@ -191,7 +191,7 @@ volumes:
     external: true
   dbdata:
     name: geonode_master-dbdata
-    external: true
+    #external: true
   dbbackups:
     name: geonode_master-dbbackups
     external: true
