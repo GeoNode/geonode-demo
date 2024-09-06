@@ -173,7 +173,7 @@ LDAP_ENABLED = ast.literal_eval(os.getenv("LDAP_ENABLED", "False"))
 if LDAP_ENABLED and "geonode_ldap" not in INSTALLED_APPS:
     INSTALLED_APPS += ("geonode_ldap",)
     
-MIDDLEWARE += ("geonode_demo.middleware.LogRequestMiddleware",)
+#MIDDLEWARE += ("geonode_demo.middleware.LogRequestMiddleware",)
 
 # Add your specific LDAP configuration after this comment:
 # https://docs.geonode.org/en/master/advanced/contrib/#configuration
