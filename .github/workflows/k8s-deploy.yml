@@ -2,9 +2,7 @@ name: Deploy to Kubernetes
 
 on:
   push:
-    branches: ["development", "stable"]
-  pull_request:
-    branches: ["development", "stable"]
+    branches: ["development"]
   workflow_dispatch:
 
 jobs:
