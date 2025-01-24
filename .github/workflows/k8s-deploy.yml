@@ -84,4 +84,5 @@ jobs:
           helm version \
           && helm list -n ${{ env.NAMESPACE }} \
           && helm dependency build --namespace ${{ env.NAMESPACE }} charts/geonode \
-          && helm upgrade --cleanup-on-fail --install --namespace ${{ env.NAMESPACE }} --values custom-values.yaml gn-demo-${{ env.BRANCH_NAME }} charts/geonode
+          && helm upgrade --cleanup-on-fail --install --namespace ${{ env.NAMESPACE }} --values custom-values.yaml gn-demo-${{ env.BRANCH_NAME }} charts/geonode \
+          && kubectl -n gn-demo-"${{ env.BRANCH_NAME }}" delete pod gn-demo-"${{ env.BRANCH_NAME }}"-geonode-0
