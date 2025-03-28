@@ -1,0 +1,10 @@
+services:
+
+  django:
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: "echo \"I'm alive.\""
+    entrypoint: ["/usr/src/geonode_demo/entrypoint.sh"]
+    command: sleep infinity
+
