@@ -1,3 +1,4 @@
--e git+https://github.com/GeoNode/geonode-mapstore-client.git@4.4.x#egg=django_geonode_mapstore_client
--e git+https://github.com/GeoNode/geonode-importer.git@1.1.x#egg=geonode-importer
--e git+https://github.com/GeoNode/geonode.git@4.4.x#egg=GeoNode
+# For an editable installation of GeoNode, you can perform the following inside the python venv:
+# pip install -e git+https://github.com/GeoNode/geonode.git@master#egg=geonode
+# pip install -e git+https://github.com/GeoNode/geonode-mapstore-client.git@master#egg=django_geonode_mapstore_client
+git+https://github.com/GeoNode/geonode.git@5.1.x#egg=GeoNode

@@ -5,11 +5,11 @@ set -e
 
 INVOKE_LOG_STDOUT=${INVOKE_LOG_STDOUT:-FALSE}
 invoke () {
-    if [ $INVOKE_LOG_STDOUT = 'true' ] || [ $INVOKE_LOG_STDOUT = 'True' ]
+    if [ "$INVOKE_LOG_STDOUT" = 'true' ] || [ "$INVOKE_LOG_STDOUT" = 'True' ]
     then
         /usr/local/bin/invoke $@
     else
-        /usr/local/bin/invoke $@ > /usr/src/geonode_demo/invoke.log 2>&1
+        /usr/local/bin/invoke $@ > /usr/src/project/invoke.log 2>&1
     fi
     echo "$@ tasks done"
 }
@@ -35,16 +35,12 @@ echo GEODATABASE_URL=$GEODATABASE_URL
 echo SITEURL=$SITEURL
 echo ALLOWED_HOSTS=$ALLOWED_HOSTS
 echo GEOSERVER_PUBLIC_LOCATION=$GEOSERVER_PUBLIC_LOCATION
-echo MONITORING_ENABLED=$MONITORING_ENABLED
-echo MONITORING_HOST_NAME=$MONITORING_HOST_NAME
-echo MONITORING_SERVICE_NAME=$MONITORING_SERVICE_NAME
-echo MONITORING_DATA_TTL=$MONITORING_DATA_TTL
 
 # invoke waitfordbs
 
 cmd="$@"
 
-if [ ${IS_CELERY} = "true" ]  || [ ${IS_CELERY} = "True" ]
+if [ "${IS_CELERY}" = "true" ]  || [ "${IS_CELERY}" = "True" ]
 then
     echo "Executing Celery server $cmd for Production"
 else
@@ -52,15 +48,14 @@ else
     invoke migrations
     invoke prepare
 
-    if [ ${FORCE_REINIT} = "true" ]  || [ ${FORCE_REINIT} = "True" ] || [ ! -e "/mnt/volumes/statics/geonode_init.lock" ]; then
-        invoke updategeoip
+    if [ "${FORCE_REINIT}" = "true" ]  || [ "${FORCE_REINIT}" = "True" ] || [ ! -e "/mnt/volumes/statics/geonode_init.lock" ]; then
         invoke fixtures
-        invoke monitoringfixture
         invoke initialized
         invoke updateadmin
     fi
 
     invoke statics
+    invoke loadthesauri
 
     echo "Executing UWSGI server $cmd for Production"
 fi

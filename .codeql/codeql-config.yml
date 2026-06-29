@@ -1,0 +1,4 @@
+languages: ${{ matrix.language }}
+
+paths-ignore: 
+  - src/project/__init__.py
