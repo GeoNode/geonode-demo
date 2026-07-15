@@ -1,4 +1,3 @@
-# Common Django template for GeoNode and Celery services below
 x-common-django:
   &default-common-django
   image: ${COMPOSE_PROJECT_NAME}/geonode:${GEONODE_BASE_IMAGE_VERSION}
@@ -15,6 +14,8 @@ x-common-django:
   depends_on:
     db:
       condition: service_healthy
+    redis:
+      condition: service_healthy
 
 services:
 
@@ -26,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: django4${COMPOSE_PROJECT_NAME}
     healthcheck:
-      test: "curl -m 10 --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://django:8000/"
+      test: "curl -m 10 --fail --silent --output /dev/null http://django:8000/"
       start_period: 60s
       interval: 60s
       timeout: 10s
@@ -47,9 +48,15 @@ services:
       - IS_CELERY=True
     entrypoint: ["/usr/src/geonode_demo/entrypoint.sh"]
     command: "celery-cmd"
+    healthcheck:
+      test: "celery -b ${BROKER_URL} inspect ping"
+      start_period: 30s
+      interval: 30s
+      timeout: 10s
+      retries: 2
 
   # Nginx is serving django static and media files and proxies to django and geonode
-  geonode:
+  nginx:
     image: ${COMPOSE_PROJECT_NAME}/nginx:${NGINX_BASE_IMAGE_VERSION}
     build:
       context: ./docker/nginx
@@ -58,7 +65,7 @@ services:
         - BASE_IMAGE_VERSION=${NGINX_BASE_IMAGE_VERSION}
     container_name: nginx4${COMPOSE_PROJECT_NAME}
     env_file:
-      - .env
+      - .env${ENVIRONMENT:+_}${ENVIRONMENT:-}
     environment:
       - RESOLVER=127.0.0.11
     ports:
@@ -69,19 +76,12 @@ services:
       - nginx-certificates:/geonode-certificates
       - statics:/mnt/volumes/statics
     restart: unless-stopped
-
-  # memcached service
-  memcached:
-    image: memcached:alpine
-    container_name: memcached4${COMPOSE_PROJECT_NAME}
-    command: memcached ${MEMCACHED_OPTIONS}
-    restart: on-failure
     healthcheck:
-      test: nc -z 127.0.0.1 11211
-      interval: 30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
+      test: "if ps -o pid | grep -w 1 > /dev/null; then echo 'nginx running'; else exit 1;fi"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   # Gets and installs letsencrypt certificates
   letsencrypt:
@@ -97,6 +97,9 @@ services:
     volumes:
       - nginx-certificates:/geonode-certificates
     restart: unless-stopped
+    depends_on:
+      nginx:
+        condition: service_healthy
 
   # Geoserver backend
   geoserver:
@@ -108,11 +111,11 @@ services:
         - BASE_IMAGE_VERSION=${GEOSERVER_BASE_IMAGE_VERSION}
     container_name: geoserver4${COMPOSE_PROJECT_NAME}
     healthcheck:
-      test: "curl -m 10 --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://geoserver:8080/geoserver/ows"
-      start_period: 60s
-      interval: 60s
+      test: ["CMD", "curl", "-f", "http://geoserver:8080/geoserver/web/wicket/resource/org.geoserver.web.GeoServerBasePage/img/logo.png"]
+      start_period: 30s
+      interval: 30s
       timeout: 10s
-      retries: 2
+      retries: 3
     env_file:
       - .env
     ports:
@@ -125,25 +128,9 @@ services:
       - tmp:/tmp
     restart: unless-stopped
     depends_on:
-      data-dir-conf:
-        condition: service_healthy
       django:
         condition: service_healthy
 
-  data-dir-conf:
-    image: ${COMPOSE_PROJECT_NAME}/geoserver_data:${GEOSERVER_DATA_BASE_IMAGE_VERSION}
-    build:
-      context: ./docker/geoserver_data
-      dockerfile: Dockerfile
-      args:
-        - BASE_IMAGE_VERSION=${GEOSERVER_DATA_BASE_IMAGE_VERSION}
-    container_name: gsconf4${COMPOSE_PROJECT_NAME}
-    entrypoint: sleep infinity
-    volumes:
-      - geoserver-data-dir:/geoserver_data/data
-    restart: unless-stopped
-    healthcheck:
-      test: "ls -A '/geoserver_data/data' | wc -l"
 
   # PostGIS database.
   db:
@@ -162,18 +149,27 @@ services:
       - dbbackups:/pg_backups
     restart: unless-stopped
     healthcheck:
-      test: "pg_isready -d postgres -U postgres"
-    # uncomment to enable remote connections to postgres
-    #ports:
-    #  - "5432:5432"
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # uncomment to enable remote connections to postgres
+      #ports:
+      #  - "5432:5432"
 
-  # Vanilla RabbitMQ service. This is needed by celery
+  # Vanilla Redis service. This is needed by celery
   redis:
     image: redis:7-alpine
     container_name: redis4${COMPOSE_PROJECT_NAME}
     volumes:
       - redisdata:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 20s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
 
 volumes:
   statics:

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geonode_project"
+version = "5.dev"
+description = "GeoNode Project"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+keywords = ["project", "geonode", "django"]
+
+dependencies = [
+    "GeoNode @ https://github.com/GeoNode/geonode/archive/refs/heads/master.zip"
+]
+
+[project.urls]
+Homepage = "https://github.com/GeoNode/geonode-project"
+
+[tool.setuptools]
+include-package-data = true
+
+# Correct package discovery layout
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["**/thesauri/*.rdf"]
