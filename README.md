@@ -1,12 +1,13 @@
-# Geonode_Demo
+# GeoNode Project
 
-GeoNode template project. Generates a django project with GeoNode support.
+GeoNode Django project. This can be forked to customize, add Python modules or Django apps to your GeoNode instance.
+
+> [!IMPORTANT]  
+This repository has been converted from a Django project template into a concrete Django project, ready to be forked and deployed. The goal is to make it easier to track updates and pull changes from this repo into your own project.s
 
 ## Table of Contents
 
 -  [Quick Docker Start](#quick-docker-start)
--  [Developer Workshop](#developer-workshop)
--  [Create a custom project](#create-a-custom-project)
 -  [Start your server using Docker](#start-your-server-using-docker)
 -  [Run the instance in development mode](#run-the-instance-in-development-mode)
 -  [Run the instance on a public site](#run-the-instance-on-a-public-site)
@@ -16,72 +17,13 @@ GeoNode template project. Generates a django project with GeoNode support.
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
 
 ## Quick Docker Start
-
-  ```bash
-    python3.10 -m venv ~/.venvs/project_name
-    source ~/.venvs/geonode_demo/bin/activate
-
-    pip install Django==3.2.*
-
-    mkdir ~/project_name
-  ```
-
-  ```bash
-    GN_VERSION=master
-
-    django-admin startproject --template=https://github.com/GeoNode/geonode-project/archive/refs/tags/$GN_VERSION.zip -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile project_name ~/project_name
-  ```
-
-  ```bash
-    cd ~/project_name
-    python create-envfile.py 
-  ```
-`create-envfile.py` accepts the following arguments:
-
-- `--https`: Enable SSL. It's disabled by default
-- `--env_type`: 
-   - When set to `prod` `DEBUG` is disabled and the creation of a valid `SSL` is requested to Letsencrypt's ACME server
-   - When set to `test`  `DEBUG` is disabled and a test `SSL` certificate is generated for local testing
-   - When set to `dev`  `DEBUG` is enabled and no `SSL` certificate is generated
-- `--hostname`: The URL that whill serve GeoNode (`localhost` by default)
-- `--email`: The administrator's email. Notice that a real email and a valid SMPT configurations are required if  `--env_type` is seto to `prod`. Letsencrypt uses to email for issuing the SSL certificate 
-- `--geonodepwd`: GeoNode's administrator password. A random value is set if left empty
-- `--geoserverpwd`: GeoNode's administrator password. A random value is set if left empty
-- `--pgpwd`: PostgreSQL's administrator password. A random value is set if left empty
-- `--dbpwd`: GeoNode DB user role's password. A random value is set if left empty
-- `--geodbpwd`: GeoNode data DB user role's password. A random value is set if left empty
-- `--clientid`: Client id of Geoserver's GeoNode Oauth2 client. A random value is set if left empty
-- `--clientsecret`: Client secret of Geoserver's GeoNode Oauth2 client. A random value is set if left empty
-```bash
-  docker compose build
-  docker compose up -d
-```
-
-## Developer Workshop
-
-Available at
-
-  ```bash
-    http://geonode.org/dev-workshop
-  ```
-
-## Create a custom project
-
-**NOTE**: *You can call your geonode project whatever you like **except 'geonode'**. Follow the naming conventions for python packages (generally lower case with underscores (``_``). In the examples below, replace ``geonode_demo`` with whatever you would like to name your project.*
-
 To setup your project follow these instructions:
 
 1. Generate the project
 
     ```bash
     git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv --python=/usr/bin/python3 geonode_demo
-    pip install Django==3.2.16
-
-    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geonode_demo
-
-    cd geonode_demo
+    cd project
     ```
 
 2. Create the .env file
@@ -142,45 +84,6 @@ To setup your project follow these instructions:
       } 
       ```
 
-### Start your server
-*Skip this part if you want to run the project using Docker instead* see [Start your server using Docker](#start-your-server-using-docker)
-
-1. Setup the Python Dependencies
-
-    **NOTE**: *Important: modify your `requirements.txt` file, by adding the `GeoNode` branch before continue!*
-
-    (see [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt))
-
-    ```bash
-    cd src
-    pip install -r requirements.txt --upgrade
-    pip install -e . --upgrade
-
-    # Install GDAL Utilities for Python
-    pip install pygdal=="`gdal-config --version`.*"
-
-    # Dev scripts
-    mv ../.override_dev_env.sample ../.override_dev_env
-    mv manage_dev.sh.sample manage_dev.sh
-    mv paver_dev.sh.sample paver_dev.sh
-
-    source ../.override_dev_env
-
-    # Using the Default Settings
-    sh ./paver_dev.sh reset
-    sh ./paver_dev.sh setup
-    sh ./paver_dev.sh sync
-    sh ./paver_dev.sh start
-    ```
-
-2. Access GeoNode from browser
-
-    **NOTE**: default admin user is ``admin`` (with pw: ``admin``)
-
-    ```bash
-    http://localhost:8000/
-    ```
-
 ### Start your server using Docker
 
 You need Docker 1.12 or higher, get the latest stable official release for your platform.
@@ -200,16 +103,6 @@ Once you have the project configured run the following command from the root fol
     before running `docker-compose up`
 
 2. Access the site on http://localhost/
-
-## Run the instance in development mode
-
-### Use dedicated docker-compose files while developing
-
-**NOTE**: In this example we are going to keep localhost as the target IP for GeoNode
-
-  ```bash
-  docker-compose -f docker-compose.development.yml -f docker-compose.development.override.yml up
-  ```
 
 ## Run the instance on a public site
 
@@ -249,7 +142,7 @@ docker system prune -a
 ### Run a Backup
 
 ```bash
-SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_FOLDER_NAME
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_project/br/backup.sh $BKP_FOLDER_NAME
 ```
 
 - BKP_FOLDER_NAME:
@@ -266,13 +159,13 @@ SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_F
 e.g.:
 
 ```bash
-docker exec -it django4geonode_demo sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/backup.sh $BKP_FOLDER_NAME'
+docker exec -it django4geonode_project sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_project/br/backup.sh $BKP_FOLDER_NAME'
 ```
 
 ### Run a Restore
 
 ```bash
-SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME
+SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_project/br/restore.sh $BKP_FOLDER_NAME
 ```
 
 - BKP_FOLDER_NAME:
@@ -289,7 +182,7 @@ SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_
 e.g.:
 
 ```bash
-docker exec -it django4geonode_demo sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_demo/br/restore.sh $BKP_FOLDER_NAME'
+docker exec -it django4geonode_project sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./geonode_project/br/restore.sh $BKP_FOLDER_NAME'
 ```
 
 ## Recommended: Track your changes
@@ -326,71 +219,46 @@ POSTGRESQL_MAX_CONNECTIONS=200
 
 In this case PostgreSQL will run accepting 200 maximum connections.
 
-## Test project generation and docker-compose build Vagrant usage
+## Developing with Dev Containers in VS Code
 
-Testing with [vagrant](https://www.vagrantup.com/docs) works like this:
-What vagrant does:
+This repo includes a .devcontainer folder with the condigurations to run Django and Celery inside a VS Code Dev Container.
+A `docker.sh` script aliases the `docker compose` command with the pre-configured arguments to use the customized compose files.
 
-Starts a vm for test on docker swarm:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - exposes service on localhost port 8888
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots to check if docker services come up correctly after reboot.
+You can run the Dev Container with the following commands:
 
 ```bash
-vagrant plugin install vagrant-reload
-#test things for docker-compose
-vagrant up
-# check services are up upon reboot
-vagrant ssh geonode-compose -c 'docker ps'
+cd .devcontainer
+chmod +x docker.sh
+./docker.sh build
+.docker.sh up -d
 ```
 
-Test geonode on [http://localhost:8888/](http://localhost:8888/)
+The Django and the Celery containers will be started **without** running the Django and Celery processes. They can be started manually inside the dev container. The container is autopopulated with VS Code development extensions for Python and a list of pre-configured luanch configurations (for Django and Celery).
 
-To clean up things and delete the vagrant box:
+Within VS Code open the command palette with `Ctrl+P` and run `Dev Container: Reopen in Container`. VS Code will recognize the presence of the two dev container, and will allow to reopen the current window inside the container's workspace.
+Wait a few seconds to let VS Code setup the dev extensions, then you should see the launch configurations.
+
+To simplify the debugging of GeoNode and the GeoNode client, these modules can be installed as editable (PEP-660) with the following commands:
 
 ```bash
-vagrant destroy -f
+pip install -e git+https://github.com/GeoNode/geonode.git@master#egg=geonode --src=/usr/src
+pip install -e git+https://github.com/GeoNode/geonode-mapstore-client.git@master#egg=django_geonode_mapstore_client --src=/usr/src
 ```
 
-## Test project generation and Docker swarm build on vagrant
+The modules will be isntalled under `/usr/src` and so at te root of the VS Code workspace.
+Notice that at the time of writing Pylance can't resolve PEP-660 editable installs. For this reason the `.vscode/settings.py` contain extrPaths for the modules.
 
-What vagrant does:
+### Running Django
+The `GeoNode` launch configuration for Django sets the `ASYNC_SIGNALS` env variable to False. This way GeoNode can be developed and debugged in sync mode, without Celery.
+If you want to test Django in async mode, you can switch this variable to `True` and tun Celery (see below).
 
-Starts a vm for test on docker swarm:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - exposes service on localhost port 8888
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots to check if docker services come up correctly after reboot.
+Running the Debug sessions for Django will start Django with its internal development server.
 
-To test on a docker swarm enable vagrant box:
+### Running Celery
+Celery exectutions requires luanching three Debug processes:
 
-```bash
-vagrant up
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant up
-# check services are up upon reboot
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant ssh geonode-compose -c 'docker service ls'
-```
+ - `Celery Worker`: the generic worker process
+ - `Celery Beat`: the scheduler
+ - `Celery Harvesters`: The worker dedicated to the harvesters
 
-Test geonode on [http://localhost:8888/](http://localhost:8888/)
-Again, to clean up things and delete the vagrant box:
-
-```bash
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant destroy -f
-```
-
-for direct deveolpment on geonode-project after first `vagrant up` to rebuild after changes to project, you can do `vagrant reload` like this:
-
-```bash
-vagrant up
-```
-
-What vagrant does (swarm or comnpose cases):
-
-Starts a vm for test on plain docker service with docker-compose:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots.
-
-[1] to achieve `docker-compose build --no-cache` just destroy vagrant boxes `vagrant destroy -f`
-
+You can also remove the `-X harvesting` argument inside the Celery Worker launch configuration to have also the harvesters running in the same worker. this way you don't need to run the Beat and the Celery Harvesters processes.

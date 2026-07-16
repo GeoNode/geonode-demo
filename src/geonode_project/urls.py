@@ -18,15 +18,16 @@
 #
 #########################################################################
 
-import os
+# Do not remove handler500 import. It is required to re-export
+# the custom error page handler for the GeoNode project
+# related issue: https://github.com/GeoNode/geonode-project/issues/570
+from geonode.urls import urlpatterns, handler500  # noqa
 
-__version__ = (4, 2, 0, "dev", 0)
-
-
-default_app_config = "geonode_demo.apps.AppConfig"
-
-
-def get_version():
-    import geonode_demo.version
-
-    return geonode_demo.version.get_version(__version__)
+"""
+# You can register your own urlpatterns here
+urlpatterns = [
+    url(r'^/?$',
+        homepage,
+        name='home'),
+ ] + urlpatterns
+"""

@@ -42,13 +42,8 @@ def shuffle(chars):
     random.shuffle(chars_as_list)
     return "".join(chars_as_list)
 
-
 _simple_chars = shuffle(string.ascii_letters + string.digits)
-_strong_chars = shuffle(
-    string.ascii_letters
-    + string.digits
-    + string.punctuation.replace('"', "").replace("'", "").replace("`", "")
-)
+_strong_chars = shuffle(string.ascii_letters + string.digits + "#%*._~")
 
 
 def generate_env_file(args):
@@ -141,7 +136,7 @@ if __name__ == "__main__":
         prog="ENV file builder",
         description="Tool for generate environment file automatically. The information can be passed or via CLI or via JSON file ( --file /path/env.json)",
         usage="python create-envfile.py localhost -f /path/to/json/file.json",
-        allow_abbrev=False,
+        allow_abbrev=False
     )
     parser.add_argument(
         "--noinput",
