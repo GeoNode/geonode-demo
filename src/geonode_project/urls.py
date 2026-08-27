@@ -22,7 +22,12 @@
 # the custom error page handler for the GeoNode project
 # related issue: https://github.com/GeoNode/geonode-project/issues/570
 from geonode.urls import urlpatterns, handler500  # noqa
+from django.urls import path
+from django.views.generic import TemplateView
 
+urlpatterns += [
+    path('privacy-cookies/', TemplateView.as_view(template_name='policy.html'), name='policy-detail'),
+]
 """
 # You can register your own urlpatterns here
 urlpatterns = [
